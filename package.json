@@ -1,0 +1,21 @@
+{
+  "name": "poducts-and-live-chat",
+  "version": "1.0.0",
+  "description": "Portal de productos con autenticacion y chat en tiempo real",
+  "main": "index.js",
+"scripts": {
+  "start": "node src/server.js",
+  "dev": "nodemon src/server.js"
+},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Diegoza04/poducts-and-live-chat.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Diegoza04/poducts-and-live-chat/issues"
+  },
+  "homepage": "https://github.com/Diegoza04/poducts-and-live-chat#readme"
+}
