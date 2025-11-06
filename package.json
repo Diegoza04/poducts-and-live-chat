@@ -1,21 +1,25 @@
 {
-  "name": "poducts-and-live-chat",
+  "name": "products-and-live-chat",
   "version": "1.0.0",
-  "description": "Portal de productos con autenticacion y chat en tiempo real",
-  "main": "index.js",
-"scripts": {
-  "start": "node src/server.js",
-  "dev": "nodemon src/server.js"
-},
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Diegoza04/poducts-and-live-chat.git"
+  "description": "Products with authentication and live chat functionality",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "client:dev": "cd client && npm run dev",
+    "client:build": "cd client && npm run build",
+    "build:all": "npm run client:build"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Diegoza04/poducts-and-live-chat/issues"
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^7.0.0",
+    "socket.io": "^4.7.0"
   },
-  "homepage": "https://github.com/Diegoza04/poducts-and-live-chat#readme"
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
 }
