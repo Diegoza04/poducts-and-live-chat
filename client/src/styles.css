@@ -1,0 +1,16 @@
+body { font-family: Arial, Helvetica, sans-serif; margin: 0; padding: 0; background:#fafafa; color:#222; }
+.container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+header { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:20px; }
+nav a { margin-right:10px; text-decoration:none; color:#0366d6; }
+.user-info { font-size:0.9rem; color:#333; }
+.btn-ghost { background: transparent; border:1px solid #ddd; padding:4px 8px; cursor:pointer; }
+.product { border-bottom:1px solid #eee; padding:10px 0; display:flex; justify-content:space-between; align-items:center; }
+.product h3 { margin:0; }
+.actions button { margin-left:8px; }
+.form { display:flex; flex-direction:column; gap:8px; max-width:420px; }
+input, textarea { padding:8px; border:1px solid #ddd; border-radius:4px; }
+button { padding:8px 12px; border-radius:5px; border:none; cursor:pointer; background:#0366d6; color:white; }
+.small { font-size:0.9rem; color:#666; }
+.chat-window { border:1px solid #ddd; height:320px; overflow:auto; padding:8px; background:white; }
+.message { padding:6px 10px; border-radius:6px; margin-bottom:6px; background:#f1f1f1; }
+.message strong { margin-right:6px; }

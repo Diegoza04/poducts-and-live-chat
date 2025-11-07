@@ -1,35 +1,56 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from 'react'
+import { Link, Outlet, useNavigate } from 'react-router-dom'
+import { getUserFromToken, logout } from './utils/auth'
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const user = getUserFromToken()
+  const navigate = useNavigate()
+
+  function handleLogout() {
+    logout()
+    navigate('/login')
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div className="container">
+      <header>
+        <div>
+          <h1>Portal de Productos</h1>
+        </div>
+
+        <nav>
+          <Link to="/">Productos</Link>
+          {user ? (
+            <>
+              <Link to="/chat">Chat</Link>
+              <button className="btn-ghost" onClick={handleLogout}>
+                Salir
+              </button>
+            </>
+          ) : (
+            <Link to="/login">Login</Link>
+          )}
+        </nav>
+
+        <div className="user-info">
+          {user ? (
+            <span>
+              Conectado como <strong>{user.username}</strong> ({user.role})
+            </span>
+          ) : (
+            <span>No autenticado</span>
+          )}
+        </div>
+      </header>
+
+      <main>
+        {}
+        <Outlet />
+      </main>
+
+      <footer>
+        <small>— Portal de productos con autenticación y chat</small>
+      </footer>
+    </div>
   )
 }
-
-export default App
