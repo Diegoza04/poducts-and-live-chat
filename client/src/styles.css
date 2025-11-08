@@ -1,16 +1,40 @@
-body { font-family: Arial, Helvetica, sans-serif; margin: 0; padding: 0; background:#fafafa; color:#222; }
-.container { max-width: 1000px; margin: 0 auto; padding: 20px; }
-header { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:20px; }
-nav a { margin-right:10px; text-decoration:none; color:#0366d6; }
-.user-info { font-size:0.9rem; color:#333; }
-.btn-ghost { background: transparent; border:1px solid #ddd; padding:4px 8px; cursor:pointer; }
-.product { border-bottom:1px solid #eee; padding:10px 0; display:flex; justify-content:space-between; align-items:center; }
-.product h3 { margin:0; }
-.actions button { margin-left:8px; }
-.form { display:flex; flex-direction:column; gap:8px; max-width:420px; }
-input, textarea { padding:8px; border:1px solid #ddd; border-radius:4px; }
-button { padding:8px 12px; border-radius:5px; border:none; cursor:pointer; background:#0366d6; color:white; }
-.small { font-size:0.9rem; color:#666; }
-.chat-window { border:1px solid #ddd; height:320px; overflow:auto; padding:8px; background:white; }
-.message { padding:6px 10px; border-radius:6px; margin-bottom:6px; background:#f1f1f1; }
-.message strong { margin-right:6px; }
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+:root {
+  --bg: #0b1220;          
+  --card: #0f172a;        
+  --muted: #94a3b8;       
+}
+
+html, body, #root { height: 100% }
+body { @apply bg-[var(--bg)] text-white font-sans antialiased; }
+
+.container-app { @apply max-w-5xl mx-auto p-6 md:p-8; }
+
+
+.card {
+  
+  background-color: rgba(15, 23, 42, 0.8); 
+  @apply backdrop-blur border border-white/10 rounded-2xl shadow-soft;
+}
+.btn { @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 font-medium transition; }
+.btn-primary { @apply bg-brand-500 hover:bg-brand-400 active:bg-brand-600 text-white shadow-soft; }
+.btn-ghost { @apply bg-white/5 hover:bg-white/10 text-white border border-white/10; }
+
+
+.input, .textarea {
+  @apply w-full rounded-xl bg-white/5 border border-white/10 px-3 py-2 text-white placeholder-white/40 outline-none;
+}
+.input:focus, .textarea:focus { @apply ring-2 ring-brand-500/60 border-transparent; }
+
+
+.navbar { @apply flex items-center justify-between gap-4 mb-6; }
+.navlink { @apply text-white/80 hover:text-white transition; }
+
+
+.product-row { @apply flex items-center justify-between p-4 border-b border-white/10 hover:bg-white/5 transition; }
+.product-title { @apply text-white font-semibold; }
+.product-sub { @apply text-sm text-[var(--muted)]; }

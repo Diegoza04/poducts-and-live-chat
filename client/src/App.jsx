@@ -1,55 +1,22 @@
 import React from 'react'
-import { Link, Outlet, useNavigate } from 'react-router-dom'
-import { getUserFromToken, logout } from './utils/auth'
+import { Outlet } from 'react-router-dom'
+import { motion } from 'framer-motion'
+import NavBar from './components/NavBar'
 
-export default function App() {
-  const user = getUserFromToken()
-  const navigate = useNavigate()
-
-  function handleLogout() {
-    logout()
-    navigate('/login')
-  }
-
+export default function App(){
   return (
-    <div className="container">
-      <header>
-        <div>
-          <h1>Portal de Productos</h1>
-        </div>
-
-        <nav>
-          <Link to="/">Productos</Link>
-          {user ? (
-            <>
-              <Link to="/chat">Chat</Link>
-              <button className="btn-ghost" onClick={handleLogout}>
-                Salir
-              </button>
-            </>
-          ) : (
-            <Link to="/login">Login</Link>
-          )}
-        </nav>
-
-        <div className="user-info">
-          {user ? (
-            <span>
-              Conectado como <strong>{user.username}</strong> ({user.role})
-            </span>
-          ) : (
-            <span>No autenticado</span>
-          )}
-        </div>
-      </header>
-
-      <main>
-        {}
+    <div className="container-app">
+      <NavBar />
+      <motion.div
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: .35, ease: 'easeOut' }}
+      >
         <Outlet />
-      </main>
+      </motion.div>
 
-      <footer>
-        <small>— Portal de productos con autenticación y chat</small>
+      <footer className="mt-10 text-center text-sm text-white/50">
+       — Portal con autenticación y chat
       </footer>
     </div>
   )
