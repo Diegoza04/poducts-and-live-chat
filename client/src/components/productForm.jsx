@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Button from './UI/Button'
+import Button from './ui/Button'
 
 const PLACEHOLDER = 'https://via.placeholder.com/160x100?text=No+image'
 

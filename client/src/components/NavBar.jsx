@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
-import Button from './UI/Button'
+import Button from './ui/Button'
 import { getUserFromToken, logout } from '../utils/auth'
 import { useCart } from '../context/cartContext'   
 
@@ -26,6 +26,8 @@ export default function NavBar(){
       <nav className="flex items-center gap-3">
         {linkBtn('/', 'Productos')}
         {linkBtn('/login', user ? 'Cuenta' : 'Login')}
+        {linkBtn('/chat', 'Chat')}
+
 
         {/* Carrito */}
         <Link

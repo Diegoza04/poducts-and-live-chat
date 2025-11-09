@@ -20,7 +20,11 @@ const __dirname = path.dirname(__filename)
 
 const app = express()
 const server = http.createServer(app)
-const io = new Server(server, { cors: { origin: '*' } })
+const io = new Server(server, {
+  cors: { origin: 'http://localhost:5173', methods: ['GET','POST'] },
+  path: '/socket.io',
+})
+
 
 
 app.use(cors())
@@ -33,7 +37,28 @@ app.use('/api/chat', chatRoutes)
 
 
 io.use(authenticateSocket)
-io.on('connection', (socket) => setupChat(io, socket))
+io.on('connection', (socket) => {
+ 
+  socket.emit('message', {
+    user: 'System',
+    message: `Bienvenido ${socket.user?.username || 'usuario'}`,
+    createdAt: new Date().toISOString()
+  })
+
+  
+  socket.on('chat:message', (payload) => {
+    const msg = {
+      user: socket.user?.username || 'Desconocido',               
+      message: String(payload?.message || '').slice(0, 500),      
+      createdAt: new Date().toISOString()
+    }
+  
+    socket.broadcast.emit('chat:message', msg)
+
+
+  })
+})
+
 
 
 app.use(express.static(path.join(__dirname, 'src')))
