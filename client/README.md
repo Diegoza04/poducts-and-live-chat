@@ -1,4 +1,5 @@
-# Frontend: Products Portal with Authentication and Real-Time Chat
+# Frontend: Portal de productos con autenticación y chat en tiempo real.
+
 
 Este directorio contiene el código fuente del **frontend** para el portal de productos con autenticación y chat en tiempo real.
 
