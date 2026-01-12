@@ -1,4 +1,6 @@
-# Portal de productos con autenticacion y chat en tiempo real
+# Portal de productos con autenticacion,chat en tiempo real,manejo de ordenes y usuarios con Graphql
+
+## Link al repositorio:https://github.com/Diegoza04/poducts-and-live-chat
 
 Portal de productos con autenticación y chat en tiempo real.  
 El proyecto está dividido en dos partes: un frontend (client) construido con React + Vite y un backend (server) con Express, MongoDB y Socket.IO.  
