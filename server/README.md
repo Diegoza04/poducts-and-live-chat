@@ -64,6 +64,11 @@ Dependencias principales (package.json):
 - socket.io (^4.7.0)
   - Canal bidireccional en tiempo real para el chat (eventos, reconexión, salas).
 
+### Nuevas dependencias:
+- **@apollo/server** (^5.2.0): Configuración del servidor GraphQL, compatible con Express.
+- **graphql** (^16.12.0): Biblioteca oficial para definir esquemas y trabajar con consultas/mutaciones GraphQL.
+- **graphql-tag** (^2.12.6): Herramienta para definir consultas/mutaciones directamente en el código.
+
 Dependencias de desarrollo:
 - nodemon (^3.1.0)
   - Recarga automática del servidor al detectar cambios durante el desarrollo.
@@ -71,6 +76,175 @@ Dependencias de desarrollo:
 Scripts útiles:
 - `npm run dev` → nodemon server.js
 - `npm start` → node server.js
+
+## Funcionalidades nuevas o destacadas
+
+1. **API REST**
+   - Endpoints para usuarios (`/api/auth`), productos (`/api/products`), historial de chat (`/api/chat`) y pedidos (`/api/admin/orders`).
+
+2. **Integración GraphQL**
+   - Queries y Mutations principales añadidas para productos, pedidos, usuarios.
+   - Implementación avanzada de resolvers con validaciones contextuales:
+     - `addOrder`
+     - `updateOrderStatus`
+     - `deleteUser`
+     - `updateUserRole`.
+
+3. **Administración completa de usuarios y pedidos**
+   - Protección con middlewares (autenticación y permisos de administrador).
+   - Endpoints: `/admin/users` y `/admin/orders`.
+
+4. **WebSockets con autenticación JWT**
+   - Emisión y recepción de mensajes seguros.
+   - Broadcast en tiempo real entre usuarios autenticados.
+
+5. **Modelos de datos avanzados**
+   - `Order`: Incluye usuarios, productos, precio total y estados.
+   - `Product`: Soporte para CRUD completo de productos.
+   - `User`: Roles, inclusión de historial de órdenes.
+
+---
+
+## Estructura del backend
+
+```
+server/
+├── .env                 # Variables de entorno
+├── config.js            # Configuración inicial (dotenv, JWT_SECRET, etc.)
+├── middleware/          # Middlewares (verificación de JWT, roles)
+├── models/              # Esquemas Mongoose (User, Order, Product, etc.)
+├── graphql/             # Esquema y resolutores para GraphQL
+├── routes/              # Endpoints REST: Auth, Admin, Chat, Products
+├── server.js            # Configuración principal: API + WebSockets + GraphQL
+└── package.json         # Dependencias del backend
+```
+
+---
+
+## GraphQL: Esquema y Queries disponibles
+
+### Definición del esquema
+
+```graphql
+type User {
+  id: ID!
+  username: String!
+  role: String!
+  orders: [Order]
+}
+
+type Product {
+  id: ID!
+  title: String!
+  description: String
+  price: Float!
+  image: String
+}
+
+type Order {
+  id: ID!
+  user: User!
+  items: [OrderItem!]!
+  status: String!
+  createdAt: String!
+  total: Float!
+}
+
+type Query {
+  products: [Product!]
+  orders: [Order!]
+  order(id: ID!): Order
+  users: [User!]!
+}
+
+type Mutation {
+  addOrder(items: [OrderInput!]!): Order!
+  updateOrderStatus(id: ID!, status: String!): Order
+  deleteUser(id: ID!): String
+  updateUserRole(id: ID!, role: String!): User
+}
+
+input OrderInput {
+  product: ID!
+  quantity: Int!
+}
+```
+
+### Queries
+- `products`: Lista de productos disponibles.
+- `orders`: Lista de pedidos, incluyendo detalles de productos/usuarios.
+- `users`: Consulta de usuarios (solo administradores).
+
+### Mutations
+- `addOrder(items: [OrderInput!]!)`: Crear un pedido.
+- `updateOrderStatus(id: ID!, status: String!)`: Actualizar el estado de una orden.
+- `deleteUser(id: ID!)`: Eliminar usuarios.
+- `updateUserRole(id: ID!, role: String!)`: Modificar roles.
+
+---
+
+## Rutas REST principales
+
+### Autenticación de usuarios
+- `POST /api/auth/register`: Registro de usuarios (opcionalmente rol).
+- `POST /api/auth/login`: Inicio de sesión (retorna JWT).
+
+### Productos (CRUD)
+- `GET /api/products`: Listado.
+- `POST /api/products`: Crear (admin).
+- `PUT /api/products/:id`: Actualizar (admin).
+- `DELETE /api/products/:id`: Eliminar (admin).
+
+### Pedidos (Admin)
+- `GET /api/admin/orders`: Consultar todos los pedidos.
+- `GET /api/admin/orders/:status`: Filtrar por estado (`completed`, etc.).
+- `PUT /api/admin/orders/:id`: Modificar estado.
+
+### Chat
+- `GET /api/chat/history`: Ver historial de chat.
+
+---
+
+## Ejemplo: Pedido en GraphQL
+
+1. **Crear Pedido (`addOrder`)**
+   ```graphql
+   mutation {
+     addOrder(items: [{ product: "ID_PRODUCTO", quantity: 2 }]) {
+       id
+       total
+       status
+       items {
+         product {
+           title
+         }
+         quantity
+         price
+       }
+     }
+   }
+   ```
+
+2. **Actualizar Estado de Pedido (`updateOrderStatus`)**
+   ```graphql
+   mutation {
+     updateOrderStatus(id: "ID_ORDER", status: "completed") {
+       id
+     }
+   }
+   ```
+
+---
+
+## Solución de problemas
+
+- **Autenticación fallida**
+  Asegurate de insertar el token vía `Authorization: Bearer <TOKEN>`.
+
+- **Errores con GraphQL**
+  Revisa el esquema definido, y verifica que el contexto (`user`) se reciba correctamente.
+
+---
 
 ## ¿Cómo ejecutar y probar el backend?
 
@@ -147,26 +321,6 @@ Conexión WebSocket (desde el frontend):
 - Eventos usados por el frontend:
   - Emisión: `chat:message`
   - Escucha: `chat:message`, `message` (mensajes genéricos), `connect`, `disconnect`, `connect_error`
-
-## Estructura de la carpeta `server/`
-
-```
-server/
-├── .env                 # Variables de entorno (PORT, MONGODB_URI, JWT_SECRET, CORS_ORIGIN, etc.)
-├── config.js            # Centraliza configuración (lectura de .env, opciones de CORS, puerto, etc.)
-├── middleware/          # Middlewares (por ejemplo: autenticación JWT, manejo de errores)
-├── models/              # Modelos de Mongoose (User, Product, ChatMessage, etc. según implementación)
-├── routes/              # Rutas de la API: /api/auth, /api/products, /api/chat, ...
-├── server.js            # Punto de entrada: Express, CORS, JSON parser, conexión MongoDB, Socket.IO
-├── package.json         # Dependencias y scripts del backend
-```
-
-- `.env`: Presente en el repositorio como referencia. Ajusta los valores a tu entorno.
-- `config.js`: Carga de `dotenv` y exportación de constantes (ej. `PORT`, `MONGODB_URI`, `JWT_SECRET`, `CORS_ORIGIN`).
-- `middleware/`: Aquí suelen residir middlewares como verificación de token, protección de rutas o logging.
-- `models/`: Esquemas de Mongoose para las entidades del dominio (usuarios, productos, mensajes de chat).
-- `routes/`: Define los endpoints REST (auth, products, chat). El frontend usa `/api/auth/*`, `/api/products/*` y `/api/chat/history`.
-- `server.js`: Crea la app de Express, aplica CORS/JSON, conecta a MongoDB, monta rutas y adjunta Socket.IO al servidor HTTP.
 
 ## Decisiones tomadas durante el desarrollo
 
