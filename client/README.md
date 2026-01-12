@@ -92,6 +92,41 @@ Dependencias de desarrollo:
 - @types/react (^19.1.16), @types/react-dom (^19.1.9)
   - Tipos para mejorar DX en editores, aunque el proyecto esté en JS.
 
+---
+
+## ¿Qué hay de nuevo?
+
+### Cambios recientes destacados:
+#### 1. Configuración de WebSocket
+- La funcionalidad de chat en tiempo real se habilita mediante **Socket.IO**.
+- Configuración Proxy en `vite.config.js`:
+  - `'/socket.io'` se conecta con el backend WebSocket en `ws://localhost:3000`.
+
+#### 2. Interacción con GraphQL
+- Se agregó el método `graphqlFetch()` en el archivo `services/api.js`:
+  - Este método permite interactuar con servicios GraphQL utilizando consultas y mutaciones.
+- Proxy agregado para la ruta `'/graphql'` en `vite.config.js`.
+
+#### 3. Rutas protegidas y lógica basada en roles
+- Se añadió una validación de roles de usuario (`admin`, `user`) en `client/src/main.jsx`.
+- Rutas de administración (`/admin/orders` y `/admin/users`) son accesibles únicamente para usuarios **admin**.
+
+#### 4. Estructura modular de administración
+- Se han añadido dos nuevas páginas en `client/src/pages/admin/`:
+  - **`ordersAdmin.jsx`:** Para la gestión de órdenes.
+  - **`usersAdmin.jsx`:** Para la gestión de usuarios.
+- Estas páginas consumen datos del backend utilizando GraphQL y utilizan componentes compartidos (e.g., **Button**, **Card**).
+
+#### 5. Componente reutilizable: `Button`
+- El archivo `client/src/components/UI/Button.jsx` contiene un componente `Button` extremadamente estilizado y reutilizable.
+  - Soporta variantes como `primary`, `ghost` y `danger`.
+
+#### 6. Contexto del carrito (`CartContext.jsx`):
+- Ahora el estado del carrito persiste mediante el almacenamiento en local (`localStorage`).
+- Se calcula el total de productos y precio automáticamente.
+
+---
+
 ## ¿Cómo ejecutar el frontend?
 
 Puedes iniciar el servidor de desarrollo con:
@@ -141,14 +176,21 @@ client/
 │   │   ├── NavBar.jsx
 │   │   ├── productForm.jsx
 │   │   └── UI/
+│   │       ├── Button.jsx
+│   │       └── Card.jsx
 │   ├── context/
+│   │   └── cartContext.jsx
 │   ├── main.jsx
 │   ├── pages/
+│   │   ├── admin/
+│   │   │   ├── ordersAdmin.jsx
+│   │   │   └── usersAdmin.jsx
 │   │   ├── cart.jsx
 │   │   ├── chat.jsx
 │   │   ├── login.jsx
 │   │   └── products.jsx
 │   ├── services/
+│   │   └── api.js
 │   ├── styles.css
 │   ├── utils/
 │   │   └── auth.js
@@ -164,10 +206,11 @@ client/
 - **UI/:** Carpeta que agrupa componentes reutilizables de interfaz de usuario, como Card y Button, entre otros.
 
 ### src/pages/
-- **cart.jsx:** Página del carrito de compras.
-- **chat.jsx:** Página para el chat en tiempo real.
-- **login.jsx:** Página de autenticación y registro.
-- **products.jsx:** Página de visualización de productos.
+- **`cart.jsx`:** Página del carrito de compras.
+- **`admin/`:** Contiene las vistas de administración (`ordersAdmin.jsx`, `usersAdmin.jsx`).
+- **`Login.jsx`:** Página para gestionar autenticación (registro e inicio de sesión).
+- **`Chat.jsx`:** Página de chat en tiempo real basada en WebSocket.
+- **`Products.jsx`:** Pagina de visualizacion de productos
 
 ### src/utils/
 - **auth.js:** Módulo de autenticación (manejo de JWT, roles, sesión).
@@ -180,6 +223,10 @@ client/
   - `src/App.jsx` define la estructura principal con `<NavBar />` y `<Outlet />`.
   - Componentes de interfaz como `src/components/UI/Card.jsx` y `Button.jsx`.
 
+- **GraphQL sobre REST**: Una arquitectura flexible y robusta para manejar peticiones del backend en tiempo real.
+
+- **Persistencia del estado**: Contexto de React para el carrito, integrando `localStorage`.
+ 
 - **Animaciones modernas:**  
   Uso de `framer-motion` para transiciones suaves en la UI, como en el `<motion.div>` de `App.jsx`:
 
