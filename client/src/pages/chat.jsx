@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { io } from 'socket.io-client'
-import Card from '../components/ui/Card'
-import Button from '../components/ui/Button'
+import Card from '../components/UI/Card'
+import Button from '../components/UI/Button'
 import { getUserFromToken, getToken } from '../utils/auth'
 
 export default function Chat(){
